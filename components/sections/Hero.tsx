@@ -13,6 +13,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function Hero() {
   const ref = useRef<HTMLElement>(null);
+  const parallaxRef = useRef<HTMLDivElement>(null);
 
   useGsap(ref as any, () => {
     const reduce = window.matchMedia(
@@ -20,108 +21,194 @@ export default function Hero() {
     ).matches;
     if (reduce) return;
 
-    gsap.fromTo(
-      ".hero-reveal",
-      { y: 24, opacity: 0, filter: "blur(8px)" },
+    // Intro Reveal Sequence
+    const tl = gsap.timeline({
+      defaults: { ease: "power3.out", duration: 1.2 },
+    });
+
+    // 1. Background elements fade in
+    tl.fromTo(
+      ".hero-bg-el",
+      { opacity: 0, scale: 0.8 },
+      { opacity: 1, scale: 1, stagger: 0.1, duration: 1.5 },
+      0,
+    );
+
+    // 2. Text reveal (masked effect)
+    tl.fromTo(
+      ".hero-text-reveal",
+      { y: 50, opacity: 0, rotateX: -10 },
       {
         y: 0,
         opacity: 1,
-        filter: "blur(0px)",
-        duration: 1,
-        stagger: 0.12,
-        ease: "power3.out",
+        rotateX: 0,
+        stagger: 0.1,
+        clearProps: "transform", // clear for hover effects later
       },
+      0.2,
     );
 
-    gsap.to(".hero-orbit", {
-      rotate: 360,
-      transformOrigin: "50% 50%",
-      duration: 14,
-      repeat: -1,
-      ease: "none",
-    });
+    // 3. Main image specialized reveal
+    tl.fromTo(
+      ".hero-photo-container",
+      { scale: 0.9, opacity: 0, y: 30 },
+      { scale: 1, opacity: 1, y: 0, duration: 1.4, ease: "expo.out" },
+      0.3,
+    );
 
-    gsap.to(".hero-photo", {
-      y: -18,
-      scrollTrigger: {
-        trigger: ref.current,
-        start: "top top",
-        end: "bottom top",
-        scrub: 1,
-      },
-    });
+    // 4. Parallax Mouse Move
+    if (parallaxRef.current) {
+      const q = gsap.utils.selector(parallaxRef.current);
+
+      const onMove = (e: MouseEvent) => {
+        const { clientX, clientY } = e;
+        const xPos = clientX / window.innerWidth - 0.5;
+        const yPos = clientY / window.innerHeight - 0.5;
+
+        // Move background shapes slower
+        gsap.to(q(".layer-bg"), {
+          x: xPos * -30,
+          y: yPos * -30,
+          duration: 1,
+          ease: "power2.out",
+        });
+
+        // Move shapes faster (closer)
+        gsap.to(q(".layer-mid"), {
+          x: xPos * -60,
+          y: yPos * -60,
+          duration: 1,
+          ease: "power2.out",
+        });
+
+        // Move main photo slightly for depth
+        gsap.to(".hero-photo-container", {
+          rotationY: xPos * 8,
+          rotationX: yPos * -8,
+          duration: 1.5,
+          ease: "power3.out",
+        });
+      };
+
+      window.addEventListener("mousemove", onMove);
+      return () => window.removeEventListener("mousemove", onMove);
+    }
   });
 
   return (
-    <section ref={ref} className="relative overflow-hidden px-6 pt-24 md:pt-28">
-      <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-10 md:grid-cols-2">
-        <div className="relative z-10">
-          {/* <div className="hero-reveal inline-flex items-center gap-2 rounded-full border border-stroke bg-glass px-3 py-1 text-xs text-white/80 shadow-glow">
-            <span className="h-1.5 w-1.5 rounded-full bg-ember" />
-            {profile.location}
+    <section
+      ref={ref}
+      className="relative min-h-[90vh] overflow-hidden px-6 pt-28 md:pt-32"
+    >
+      {/* Background Pattern & Floating Objects */}
+      <div
+        ref={parallaxRef}
+        className="absolute inset-0 z-0 overflow-hidden pointer-events-none"
+      >
+        {/* Grid Background */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-size-[4rem_4rem] mask-[radial-gradient(ellipse_60%_50%_at_50%_0%,black,transparent)]" />
+
+        {/* Floating Shapes */}
+        <div className="hero-bg-el layer-bg absolute left-[10%] top-[20%] h-32 w-32 rounded-full bg-ember/10 blur-3xl" />
+        <div className="hero-bg-el layer-bg absolute right-[15%] top-[10%] h-64 w-64 rounded-full bg-blue-500/5 blur-[100px]" />
+
+        <div className="hero-bg-el layer-mid absolute left-[5%] bottom-[20%] h-4 w-4 rounded-full border border-white/10" />
+        <div className="hero-bg-el layer-mid absolute right-[20%] top-[15%] h-8 w-8 rotate-45 border border-ember/20" />
+        <div className="hero-bg-el layer-mid absolute left-[40%] top-[40%] h-2 w-2 rounded-full bg-white/20" />
+      </div>
+
+      <div className="relative z-10 mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 md:grid-cols-2">
+        <div className="order-2 md:order-1">
+          {/* Status Badge */}
+          {/* <div className="hero-text-reveal mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/70 backdrop-blur-md">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
+            </span>
+            Available for new projects
           </div> */}
 
-          <h1 className="hero-reveal mt-5 text-4xl font-semibold tracking-tight md:text-6xl">
-            <span className="text-white/90">Frontend Engineer</span>
-            <span className="block bg-gradient-to-r from-white to-white/60 bg-clip-text text-transparent">
-              with modern UI & performance mindset
-            </span>
+          <h1 className="text-5xl font-bold tracking-tight md:text-7xl">
+            <div className="overflow-hidden py-1">
+              <span className="hero-text-reveal block text-white/95">
+                Frontend
+              </span>
+            </div>
+            <div className="overflow-hidden py-1">
+              <span className="hero-text-reveal block bg-linear-to-r from-white to-white/50 bg-clip-text text-transparent">
+                Engineer.
+              </span>
+            </div>
           </h1>
 
-          <p className="hero-reveal mt-4 max-w-xl text-white/75">
+          <p className="hero-text-reveal mt-6 max-w-lg text-lg text-white/60 leading-relaxed">
             {profile.summary}
           </p>
 
-          <div className="hero-reveal mt-6 flex flex-wrap gap-3">
-            {profile.highlights.map((h) => (
-              <span
-                key={h}
-                className="rounded-full border border-stroke bg-glass px-3 py-1 text-xs text-white/80"
-              >
-                {h}
-              </span>
-            ))}
+          <div className="hero-text-reveal mt-8 flex flex-wrap gap-4">
+            <MagneticButton href="#projects">View Latest Work</MagneticButton>
+            <MagneticButton href="#contact" variant="secondary">
+              Let&apos;s Talk
+            </MagneticButton>
           </div>
 
-          <div className="hero-reveal mt-8 flex flex-wrap gap-3">
-            <MagneticButton href="#projects">View Work</MagneticButton>
-            <MagneticButton href="#contact" variant="secondary">
-              Contact
-            </MagneticButton>
+          <div className="hero-text-reveal mt-12 flex items-center gap-6 text-sm text-white/40">
+            <div className="flex items-center gap-2">
+              <span className="h-px w-8 bg-white/20" />
+              <span>Core Stack</span>
+            </div>
+            <div className="flex gap-4">
+              {["Next.js", "React", "Typescript", "GSAP", "Tailwind"].map(
+                (tech) => (
+                  <span
+                    key={tech}
+                    className="hover:text-white/80 transition-colors cursor-default"
+                  >
+                    {tech}
+                  </span>
+                ),
+              )}
+            </div>
           </div>
         </div>
 
-        <div className="relative">
-          {/* orbit rings */}
-          <div className="hero-orbit pointer-events-none absolute left-1/2 top-1/2 h-[520px] w-[520px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-stroke opacity-60" />
-          <div className="hero-orbit pointer-events-none absolute left-1/2 top-1/2 h-[420px] w-[420px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-stroke opacity-30" />
+        <div className="order-1 flex justify-center md:order-2 md:justify-end perspective-[1000px]">
+          <div className="hero-photo-container relative w-full max-w-[460px] transform-3d">
+            {/* Decorative back layers */}
+            <div className="absolute -inset-4 rounded-3xl border border-white/5 bg-white/2 backdrop-blur-sm -z-10 transform translate-z-[-20px]" />
 
-          {/* photo card */}
-          <div className="hero-photo relative mx-auto w-full max-w-[440px] overflow-hidden rounded-2xl border border-stroke bg-glass shadow-glow">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_15%,rgba(177,15,46,0.40),transparent_55%)]" />
-            <Image
-              src={me}
-              alt="Portrait"
-              width={900}
-              height={900}
-              priority
-              className="relative z-10 h-[460px] w-full object-cover"
-            />
-            <div className="absolute bottom-0 left-0 right-0 z-20 p-4">
-              <div className="rounded-xl border border-stroke bg-black/30 px-4 py-3 backdrop-blur">
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-white/85">{profile.name}</span>
-                  <span className="font-[family-name:var(--font-mono)] text-xs text-white/60">
-                    {/* Next.js • GSAP • TS */}
-                    Senior Frontend Engineer
-                  </span>
+            <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-glass shadow-2xl">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.1),transparent_50%)] z-20 pointer-events-none" />
+
+              <Image
+                src={me}
+                alt="Portrait"
+                width={900}
+                height={900}
+                priority
+                className="relative z-10 h-[500px] w-full object-cover transition-transform duration-700 hover:scale-105"
+              />
+
+              {/* Overlay content on image */}
+              <div className="absolute bottom-4 left-4 right-4 z-30">
+                <div className="overflow-hidden rounded-xl bg-black/40 p-4 backdrop-blur-md border border-white/10">
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <div className="text-white font-medium text-sm">
+                        {profile.name}
+                      </div>
+                      <div className="text-white/50 text-xs">
+                        Senior Frontend Engineer
+                      </div>
+                    </div>
+                    <div className="h-8 w-8 rounded-full bg-white/10 flex items-center justify-center">
+                      <span className="text-xs">👋</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-
-          {/* edge glow */}
-          <div className="pointer-events-none absolute -inset-6 rounded-[2.2rem] bg-[radial-gradient(circle_at_50%_50%,rgba(177,15,46,0.22),transparent_60%)] blur-2xl" />
         </div>
       </div>
     </section>
