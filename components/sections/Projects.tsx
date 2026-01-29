@@ -11,7 +11,7 @@ gsap.registerPlugin(ScrollTrigger);
 export default function Projects() {
   const ref = useRef<HTMLElement>(null);
 
-  useGsap(ref, () => {
+  useGsap(ref as any, () => {
     const reduce = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;

@@ -14,7 +14,7 @@ gsap.registerPlugin(ScrollTrigger);
 export default function About() {
   const ref = useRef<HTMLElement>(null);
 
-  useGsap(ref, () => {
+  useGsap(ref as any, () => {
     const reduce = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
@@ -55,7 +55,9 @@ export default function About() {
         duration: 1.2,
         ease: "power2.out",
         scrollTrigger: { trigger: el, start: "top 85%" },
-        onUpdate: () => (el.textContent = Math.round(obj.v).toString()),
+        onUpdate: () => {
+          el.textContent = Math.round(obj.v).toString();
+        },
       });
     });
   });
