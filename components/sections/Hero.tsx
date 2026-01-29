@@ -56,15 +56,15 @@ export default function Hero() {
     <section ref={ref} className="relative overflow-hidden px-6 pt-24 md:pt-28">
       <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-10 md:grid-cols-2">
         <div className="relative z-10">
-          <div className="hero-reveal inline-flex items-center gap-2 rounded-full border border-stroke bg-glass px-3 py-1 text-xs text-white/80 shadow-glow">
+          {/* <div className="hero-reveal inline-flex items-center gap-2 rounded-full border border-stroke bg-glass px-3 py-1 text-xs text-white/80 shadow-glow">
             <span className="h-1.5 w-1.5 rounded-full bg-ember" />
             {profile.location}
-          </div>
+          </div> */}
 
           <h1 className="hero-reveal mt-5 text-4xl font-semibold tracking-tight md:text-6xl">
             <span className="text-white/90">Frontend Engineer</span>
             <span className="block bg-gradient-to-r from-white to-white/60 bg-clip-text text-transparent">
-              with cinematic UI & performance mindset
+              with modern UI & performance mindset
             </span>
           </h1>
 
@@ -112,7 +112,8 @@ export default function Hero() {
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-white/85">{profile.name}</span>
                   <span className="font-[family-name:var(--font-mono)] text-xs text-white/60">
-                    Next.js • GSAP • TS
+                    {/* Next.js • GSAP • TS */}
+                    Senior Frontend Engineer
                   </span>
                 </div>
               </div>

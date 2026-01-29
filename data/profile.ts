@@ -9,7 +9,7 @@ export const profile = {
     linkedin: "https://linkedin.com/in/ahmed-esmail-a28152239",
   },
   summary:
-    "Frontend Developer with strong experience building scalable web apps using React & Next.js, plus hands-on ServiceNow development for ITSM/workflow systems. Open to Frontend, ServiceNow, and hybrid roles.",
+    "Frontend Developer with strong experience building scalable web apps using React & Next.js, Angula, Vue, plus hands-on ServiceNow development for ITSM/workflow systems. Open to Frontend, ServiceNow, and hybrid roles.",
   highlights: [
     "Next.js / React performance & SEO",
     "ServiceNow ITSM + workflow automation",

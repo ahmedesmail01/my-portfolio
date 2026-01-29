@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import gsap from "gsap";
 import { profile } from "@/data/profile";
+import Image from "next/image";
 
 const SECTIONS = [
   { id: "about", label: "About" },
@@ -71,9 +72,20 @@ export default function Navbar() {
 
   return (
     <div ref={barRef} className="fixed left-0 right-0 top-0 z-50 px-4 pt-4">
-      <nav className="mx-auto flex max-w-6xl items-center justify-between gap-4 rounded-2xl border border-stroke bg-black/35 px-4 py-3 backdrop-blur shadow-glow">
+      <nav className="mx-auto flex max-w-6xl items-center justify-between gap-4 rounded-2xl border border-stroke bg-black/90 px-4 py-3 backdrop-blur shadow-glow">
         <Link href="/" className="flex items-center gap-3">
-          <span className="h-2 w-2 rounded-full bg-ember shadow-glow" />
+          <span className="relative h-9 w-9 overflow-hidden rounded-full border border-stroke bg-black/25 shadow-glow">
+            <Image
+              src="/images/me.jpeg"
+              alt={`${profile.name} avatar`}
+              fill
+              sizes="36px"
+              className="object-cover"
+              priority
+            />
+            {/* subtle highlight */}
+            <span className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(177,15,46,0.25),transparent_55%)]" />
+          </span>
           <div className="leading-tight">
             <div className="text-sm font-semibold">{profile.name}</div>
             <div className="font-[family-name:var(--font-mono)] text-[11px] text-white/55">
@@ -119,7 +131,7 @@ export default function Navbar() {
 
       {/* Mobile */}
       {open ? (
-        <div className="mx-auto mt-3 max-w-6xl overflow-hidden rounded-2xl border border-stroke bg-black/35 p-3 backdrop-blur shadow-glow md:hidden">
+        <div className="mx-auto mt-3 max-w-6xl overflow-hidden rounded-2xl border border-stroke bg-black/90 p-3 backdrop-blur shadow-glow md:hidden">
           <div className="grid grid-cols-2 gap-2">
             {links.map((l) => (
               <button
