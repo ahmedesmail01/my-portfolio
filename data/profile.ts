@@ -1,0 +1,47 @@
+export const profile = {
+  name: "Ahmed Esmail",
+  title: "Frontend Developer • ServiceNow Developer",
+  location: "Cairo, Egypt",
+  email: "ahmedesmail34180@gmail.com",
+  phone: "+201025698192",
+  links: {
+    github: "https://github.com/ahmedesmail01",
+    linkedin: "https://linkedin.com/in/ahmed-esmail-a28152239",
+  },
+  summary:
+    "Frontend Developer with strong experience building scalable web apps using React & Next.js, plus hands-on ServiceNow development for ITSM/workflow systems. Open to Frontend, ServiceNow, and hybrid roles.",
+  highlights: [
+    "Next.js / React performance & SEO",
+    "ServiceNow ITSM + workflow automation",
+    "Also experienced with Angular & Vue",
+  ],
+  skills: {
+    frontend: [
+      "React",
+      "Next.js",
+      "TypeScript",
+      "Redux Toolkit",
+      "Zustand",
+      "React Query",
+      "TailwindCSS",
+      "Shadcn UI",
+      "Ant Design",
+      "MUI",
+      "React Hook Form",
+      "i18next",
+      "Next-Intl",
+      "Jest",
+      "RTL",
+    ],
+    servicenow: [
+      "ITSM",
+      "Service Catalog",
+      "RBAC",
+      "Business Rules",
+      "Client Scripts",
+      "Approvals",
+      "Notifications",
+    ],
+    tools: ["Git", "GitHub", "Figma", "Postman", "Chrome DevTools", "CI/CD"],
+  },
+};
