@@ -9,7 +9,9 @@ import { useGsap } from "@/components/anim/useGsap";
 import MagneticButton from "@/components/ui/MagneticButton";
 import me from "@/public/images/me.jpeg";
 
-gsap.registerPlugin(ScrollTrigger);
+import { TextPlugin } from "gsap/TextPlugin";
+
+gsap.registerPlugin(ScrollTrigger, TextPlugin);
 
 export default function Hero() {
   const ref = useRef<HTMLElement>(null);
@@ -34,29 +36,63 @@ export default function Hero() {
       0,
     );
 
-    // 2. Text reveal (masked effect)
+    // 2. Typing effect for Headings
+    tl.fromTo(
+      ".type-frontend",
+      { text: "" },
+      {
+        text: "Frontend",
+        duration: 0.8,
+        ease: "none",
+      },
+      0.5,
+    );
+
+    tl.fromTo(
+      ".type-engineer",
+      { text: "" },
+      {
+        text: "Engineer.",
+        duration: 0.8,
+        ease: "none",
+      },
+      1.3,
+    );
+
+    // 3. Typing effect for Summary (faster)
+    tl.fromTo(
+      ".type-summary",
+      { text: "" },
+      {
+        text: profile.summary,
+        duration: 1.2,
+        ease: "none",
+      },
+      2.1,
+    );
+
+    // 4. Other masked elements reveal (buttons, stack)
     tl.fromTo(
       ".hero-text-reveal",
-      { y: 50, opacity: 0, rotateX: -10 },
+      { y: 50, opacity: 0 },
       {
         y: 0,
         opacity: 1,
-        rotateX: 0,
         stagger: 0.1,
-        clearProps: "transform", // clear for hover effects later
+        clearProps: "transform",
       },
-      0.2,
+      3.0, // Start after summary
     );
 
-    // 3. Main image specialized reveal
+    // 5. Main image specialized reveal
     tl.fromTo(
       ".hero-photo-container",
       { scale: 0.9, opacity: 0, y: 30 },
       { scale: 1, opacity: 1, y: 0, duration: 1.4, ease: "expo.out" },
-      0.3,
+      0.5, // Start early with text
     );
 
-    // 4. Parallax Mouse Move
+    // 6. Parallax Mouse Move
     if (parallaxRef.current) {
       const q = gsap.utils.selector(parallaxRef.current);
 
@@ -130,18 +166,18 @@ export default function Hero() {
 
           <h1 className="text-5xl font-bold tracking-tight md:text-7xl">
             <div className="overflow-hidden py-1">
-              <span className="hero-text-reveal block text-white/95">
+              <span className="type-frontend block text-white/95">
                 Frontend
               </span>
             </div>
             <div className="overflow-hidden py-1">
-              <span className="hero-text-reveal block bg-linear-to-r from-white to-white/50 bg-clip-text text-transparent">
+              <span className="type-engineer block bg-linear-to-r from-white to-white/50 bg-clip-text text-transparent">
                 Engineer.
               </span>
             </div>
           </h1>
 
-          <p className="hero-text-reveal mt-6 max-w-lg text-lg text-white/60 leading-relaxed">
+          <p className="type-summary mt-6 max-w-lg text-lg text-white/60 leading-relaxed">
             {profile.summary}
           </p>
 
