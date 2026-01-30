@@ -12,23 +12,38 @@ import BlurText from "@/components/ui/BlurText";
 import DarkVeil from "@/components/ui/DarkVeil";
 import LogoLoop from "@/components/ui/LogoLoop";
 import { useRef } from "react";
+import {
+  SiNextdotjs,
+  SiReact,
+  SiTypescript,
+  SiTailwindcss,
+  SiFramer,
+  SiNodedotjs,
+  SiAngular,
+  SiVuedotjs,
+  SiGithub,
+  SiNestjs,
+  SiPrisma,
+  SiStripe,
+  SiGreensock, // Using as GSAP placeholder since GSAP doesn't have a direct SI icon often used, or I can use an SVG
+} from "react-icons/si";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const TECH_STACK = [
-  { id: 1, label: "Next.js" },
-  { id: 2, label: "React" },
-  { id: 3, label: "TypeScript" },
-  { id: 4, label: "GSAP" },
-  { id: 5, label: "Tailwind CSS" },
-  { id: 6, label: "Framer Motion" },
-  { id: 7, label: "Node.js" },
-  { id: 8, label: "Angular.js" },
-  { id: 9, label: "Vue.js" },
-  { id: 10, label: "Github" },
-  { id: 11, label: "Nestjs" },
-  { id: 12, label: "Prisma" },
-  { id: 13, label: "Stripe" },
+  { id: 1, label: "Next.js", icon: <SiNextdotjs /> },
+  { id: 2, label: "React", icon: <SiReact /> },
+  { id: 3, label: "TypeScript", icon: <SiTypescript /> },
+  { id: 4, label: "GSAP", icon: <SiGreensock /> },
+  { id: 5, label: "Tailwind CSS", icon: <SiTailwindcss /> },
+  { id: 6, label: "Framer Motion", icon: <SiFramer /> },
+  { id: 7, label: "Node.js", icon: <SiNodedotjs /> },
+  { id: 8, label: "Angular", icon: <SiAngular /> },
+  { id: 9, label: "Vue.js", icon: <SiVuedotjs /> },
+  { id: 10, label: "Github", icon: <SiGithub /> },
+  { id: 11, label: "Nestjs", icon: <SiNestjs /> },
+  { id: 12, label: "Prisma", icon: <SiPrisma /> },
+  { id: 13, label: "Stripe", icon: <SiStripe /> },
 ];
 
 export default function Hero() {
@@ -120,7 +135,7 @@ export default function Hero() {
   return (
     <section
       ref={ref}
-      className="relative min-h-[90vh] overflow-hidden px-6 pt-28 md:pt-32"
+      className="relative min-h-[90vh] overflow-hidden px-6 py-28 md:py-32"
     >
       {/* Background Pattern & Floating Objects */}
       <div ref={parallaxRef} className="absolute inset-0 z-0 overflow-hidden">

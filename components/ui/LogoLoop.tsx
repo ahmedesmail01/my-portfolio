@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 interface Logo {
   id: string | number;
   label: string;
+  icon: React.ReactNode;
 }
 
 interface LogoLoopProps {
@@ -14,17 +15,17 @@ interface LogoLoopProps {
 
 export default function LogoLoop({ logos }: LogoLoopProps) {
   // Duplicate logos to create a seamless loop
-  const duplicatedLogos = [...logos, ...logos, ...logos, ...logos];
+  const duplicatedLogos = [...logos, ...logos, ...logos];
 
   return (
-    <div className="relative flex w-full overflow-hidden mask-[linear-gradient(to_right,transparent,white_20%,white_80%,transparent)]">
+    <div className="relative flex w-full overflow-hidden mask-[linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
       <motion.div
-        className="flex gap-8 pr-8"
+        className="flex gap-12 pr-12 items-center"
         animate={{
-          x: ["0%", "-50%"],
+          x: ["0%", "-33.33%"],
         }}
         transition={{
-          duration: 20, // Adjust speed
+          duration: 30, // Slower, smoother scroll
           ease: "linear",
           repeat: Infinity,
         }}
@@ -32,11 +33,13 @@ export default function LogoLoop({ logos }: LogoLoopProps) {
         {duplicatedLogos.map((logo, index) => (
           <div
             key={`${logo.id}-${index}`}
-            className="flex shrink-0 items-center justify-center"
+            className="group flex shrink-0 items-center justify-center"
           >
-            <span className="cursor-default text-sm text-white/50 transition-colors hover:text-white/90">
-              {logo.label}
-            </span>
+            <div className="flex flex-col items-center gap-2 transition-all duration-300 group-hover:scale-110">
+              <div className="text-3xl text-white/40 grayscale transition-all duration-500 group-hover:text-white group-hover:grayscale-0">
+                {logo.icon}
+              </div>
+            </div>
           </div>
         ))}
       </motion.div>

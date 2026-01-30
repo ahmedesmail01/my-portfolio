@@ -18,7 +18,7 @@ export default function Page() {
       <Contact />
       <footer className="px-6 pb-10 pt-16 text-center text-white/60">
         <span className="font-[family-name:var(--font-mono)] text-xs">
-          Built with Next.js • GSAP • TypeScript
+          Made With ❤️ By Ahmed
         </span>
       </footer>
     </main>

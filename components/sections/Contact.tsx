@@ -144,9 +144,9 @@ export default function Contact() {
 
           <div className="ct-reveal rounded-2xl border border-stroke bg-glass p-6 shadow-glow">
             <div className="text-lg font-semibold">Send a message</div>
-            <p className="mt-1 text-sm text-white/65">
+            {/* <p className="mt-1 text-sm text-white/65">
               This uses your email client (mailto) — no backend needed.
-            </p>
+            </p> */}
 
             <form onSubmit={submit} className="mt-5 space-y-3">
               <input
@@ -177,9 +177,9 @@ export default function Contact() {
                 Send
               </button>
 
-              <div className="text-xs text-white/50">
+              {/* <div className="text-xs text-white/50">
                 Tip: You can also copy email/phone from the left panel.
-              </div>
+              </div> */}
             </form>
           </div>
         </div>
