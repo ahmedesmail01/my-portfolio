@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import { useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { profile } from "@/data/profile";
@@ -9,9 +8,28 @@ import { useGsap } from "@/components/anim/useGsap";
 import MagneticButton from "@/components/ui/MagneticButton";
 import me from "@/public/images/me.jpeg";
 
-import { TextPlugin } from "gsap/TextPlugin";
+import BlurText from "@/components/ui/BlurText";
+import DarkVeil from "@/components/ui/DarkVeil";
+import LogoLoop from "@/components/ui/LogoLoop";
+import { useRef } from "react";
 
-gsap.registerPlugin(ScrollTrigger, TextPlugin);
+gsap.registerPlugin(ScrollTrigger);
+
+const TECH_STACK = [
+  { id: 1, label: "Next.js" },
+  { id: 2, label: "React" },
+  { id: 3, label: "TypeScript" },
+  { id: 4, label: "GSAP" },
+  { id: 5, label: "Tailwind CSS" },
+  { id: 6, label: "Framer Motion" },
+  { id: 7, label: "Node.js" },
+  { id: 8, label: "Angular.js" },
+  { id: 9, label: "Vue.js" },
+  { id: 10, label: "Github" },
+  { id: 11, label: "Nestjs" },
+  { id: 12, label: "Prisma" },
+  { id: 13, label: "Stripe" },
+];
 
 export default function Hero() {
   const ref = useRef<HTMLElement>(null);
@@ -28,7 +46,7 @@ export default function Hero() {
       defaults: { ease: "power3.out", duration: 1.2 },
     });
 
-    // 1. Background elements fade in
+    // 1. Background elements fade in (DarkVeil handles its own generic vibe, but we can fade in overlay objects)
     tl.fromTo(
       ".hero-bg-el",
       { opacity: 0, scale: 0.8 },
@@ -36,63 +54,31 @@ export default function Hero() {
       0,
     );
 
-    // 2. Typing effect for Headings
-    tl.fromTo(
-      ".type-frontend",
-      { text: "" },
-      {
-        text: "Frontend",
-        duration: 0.8,
-        ease: "none",
-      },
-      0.5,
-    );
+    // Text reveals are handled by BlurText's internal Framer Motion,
+    // but we can coordinate the button/image reveals with GSAP delay.
 
-    tl.fromTo(
-      ".type-engineer",
-      { text: "" },
-      {
-        text: "Engineer.",
-        duration: 0.8,
-        ease: "none",
-      },
-      1.3,
-    );
-
-    // 3. Typing effect for Summary (faster)
-    tl.fromTo(
-      ".type-summary",
-      { text: "" },
-      {
-        text: profile.summary,
-        duration: 1.2,
-        ease: "none",
-      },
-      2.1,
-    );
-
-    // 4. Other masked elements reveal (buttons, stack)
+    // 2. Other masked elements reveal (buttons)
     tl.fromTo(
       ".hero-text-reveal",
-      { y: 50, opacity: 0 },
+      { y: 30, opacity: 0 },
       {
         y: 0,
         opacity: 1,
         stagger: 0.1,
         clearProps: "transform",
       },
-      3.0, // Start after summary
+      0.8, // Start a bit later to let text blur in
     );
 
-    // 5. Main image specialized reveal
+    // 3. Main image specialized reveal
     tl.fromTo(
       ".hero-photo-container",
       { scale: 0.9, opacity: 0, y: 30 },
       { scale: 1, opacity: 1, y: 0, duration: 1.4, ease: "expo.out" },
-      0.5, // Start early with text
+      0.5,
     );
 
-    // 6. Parallax Mouse Move
+    // 4. Parallax Mouse Move - Keep this for the shapes
     if (parallaxRef.current) {
       const q = gsap.utils.selector(parallaxRef.current);
 
@@ -137,49 +123,54 @@ export default function Hero() {
       className="relative min-h-[90vh] overflow-hidden px-6 pt-28 md:pt-32"
     >
       {/* Background Pattern & Floating Objects */}
-      <div
-        ref={parallaxRef}
-        className="absolute inset-0 z-0 overflow-hidden pointer-events-none"
-      >
-        {/* Grid Background */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-size-[4rem_4rem] mask-[radial-gradient(ellipse_60%_50%_at_50%_0%,black,transparent)]" />
+      <div ref={parallaxRef} className="absolute inset-0 z-0 overflow-hidden">
+        {/* Dark Veil Background */}
+        <DarkVeil
+          hueShift={0}
+          noiseIntensity={0}
+          scanlineIntensity={0}
+          speed={0.5}
+          scanlineFrequency={0}
+          warpAmount={0}
+        />
 
         {/* Floating Shapes */}
-        <div className="hero-bg-el layer-bg absolute left-[10%] top-[20%] h-32 w-32 rounded-full bg-ember/10 blur-3xl" />
-        <div className="hero-bg-el layer-bg absolute right-[15%] top-[10%] h-64 w-64 rounded-full bg-blue-500/5 blur-[100px]" />
+        <div className="hero-bg-el layer-bg absolute left-[10%] top-[20%] h-32 w-32 rounded-full bg-ember/10 blur-3xl pointer-events-none" />
+        <div className="hero-bg-el layer-bg absolute right-[15%] top-[10%] h-64 w-64 rounded-full bg-blue-500/5 blur-[100px] pointer-events-none" />
 
-        <div className="hero-bg-el layer-mid absolute left-[5%] bottom-[20%] h-4 w-4 rounded-full border border-white/10" />
-        <div className="hero-bg-el layer-mid absolute right-[20%] top-[15%] h-8 w-8 rotate-45 border border-ember/20" />
-        <div className="hero-bg-el layer-mid absolute left-[40%] top-[40%] h-2 w-2 rounded-full bg-white/20" />
+        <div className="hero-bg-el layer-mid absolute left-[5%] bottom-[20%] h-4 w-4 rounded-full border border-white/10 pointer-events-none" />
+        <div className="hero-bg-el layer-mid absolute right-[20%] top-[15%] h-8 w-8 rotate-45 border border-ember/20 pointer-events-none" />
+        <div className="hero-bg-el layer-mid absolute left-[40%] top-[40%] h-2 w-2 rounded-full bg-white/20 pointer-events-none" />
       </div>
 
       <div className="relative z-10 mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 md:grid-cols-2">
         <div className="order-2 md:order-1">
-          {/* Status Badge */}
-          {/* <div className="hero-text-reveal mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/70 backdrop-blur-md">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
-            </span>
-            Available for new projects
-          </div> */}
-
           <h1 className="text-5xl font-bold tracking-tight md:text-7xl">
-            <div className="overflow-hidden py-1">
-              <span className="type-frontend block text-white/95">
-                Frontend
-              </span>
+            <div className="py-1">
+              <BlurText
+                text="Frontend"
+                className="block text-white/95"
+                delay={0.2}
+              />
             </div>
-            <div className="overflow-hidden py-1">
-              <span className="type-engineer block bg-linear-to-r from-white to-white/50 bg-clip-text text-transparent">
-                Engineer.
+            <div className="py-1">
+              <span className="block bg-linear-to-r from-white to-white/50 bg-clip-text text-transparent">
+                <BlurText
+                  text="Engineer."
+                  className="block text-white/95"
+                  delay={0.4}
+                />
               </span>
             </div>
           </h1>
 
-          <p className="type-summary mt-6 max-w-lg text-lg text-white/60 leading-relaxed">
-            {profile.summary}
-          </p>
+          <div className="mt-6 max-w-lg text-lg text-white/60 leading-relaxed">
+            <BlurText
+              text={profile.summary}
+              delay={0.6}
+              wordClassName="inline-block mr-1.5"
+            />
+          </div>
 
           <div className="hero-text-reveal mt-8 flex flex-wrap gap-4">
             <MagneticButton href="#projects">View Latest Work</MagneticButton>
@@ -191,19 +182,10 @@ export default function Hero() {
           <div className="hero-text-reveal mt-12 flex items-center gap-6 text-sm text-white/40">
             <div className="flex items-center gap-2">
               <span className="h-px w-8 bg-white/20" />
-              <span>Core Stack</span>
+              <span className="shrink-0">Core Stack</span>
             </div>
-            <div className="flex gap-4">
-              {["Next.js", "React", "Typescript", "GSAP", "Tailwind"].map(
-                (tech) => (
-                  <span
-                    key={tech}
-                    className="hover:text-white/80 transition-colors cursor-default"
-                  >
-                    {tech}
-                  </span>
-                ),
-              )}
+            <div className="w-full max-w-[300px] overflow-hidden mask-[linear-gradient(to_right,transparent,black_20%,black_80%,transparent)]">
+              <LogoLoop logos={TECH_STACK} />
             </div>
           </div>
         </div>
