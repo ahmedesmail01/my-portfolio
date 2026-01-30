@@ -16,8 +16,8 @@ export default function BlurText({
   className = "",
   wordClassName = "",
   delay = 0,
-  duration = 0.8,
-  stagger = 0.08,
+  duration = 0.1,
+  stagger = 0.02,
 }: BlurTextProps) {
   const words = text.split(" ");
 
