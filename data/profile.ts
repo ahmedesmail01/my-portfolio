@@ -2,7 +2,8 @@ export const profile = {
   name: "Ahmed Esmail",
   title: "Frontend Developer • ServiceNow Developer",
   location: "Cairo, Egypt",
-  email: "ahmedesmail34180@gmail.com",
+  // email: "ahmedesmail34180@gmail.com",
+  email: "ahmedesmailofficial01@gmail.com",
   phone: "+201025698192",
   links: {
     github: "https://github.com/ahmedesmail01",
