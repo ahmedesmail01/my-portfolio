@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
 interface Logo {
@@ -17,18 +17,32 @@ export default function LogoLoop({ logos }: LogoLoopProps) {
   // Duplicate logos to create a seamless loop
   const duplicatedLogos = [...logos, ...logos, ...logos];
 
+  const [reduceMotion, setReduceMotion] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReduceMotion(mq.matches);
+    const handler = (event: MediaQueryListEvent) =>
+      setReduceMotion(event.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+
   return (
     <div className="relative flex w-full overflow-hidden mask-[linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
       <motion.div
         className="flex gap-12 pr-12 items-center"
-        animate={{
-          x: ["0%", "-33.33%"],
-        }}
-        transition={{
-          duration: 30, // Slower, smoother scroll
-          ease: "linear",
-          repeat: Infinity,
-        }}
+        animate={reduceMotion ? undefined : { x: ["0%", "-33.33%"] }}
+        transition={
+          reduceMotion
+            ? undefined
+            : {
+                duration: 30,
+                ease: "linear",
+                repeat: Infinity,
+              }
+        }
       >
         {duplicatedLogos.map((logo, index) => (
           <div

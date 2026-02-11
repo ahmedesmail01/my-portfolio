@@ -35,16 +35,6 @@ export default function About() {
       },
     );
 
-    // glitch headline micro loop
-    gsap.to(".glitch", {
-      textShadow: "0 0 22px rgba(177,15,46,.65)",
-      duration: 0.12,
-      repeat: -1,
-      yoyo: true,
-      ease: "none",
-      repeatDelay: 2.4,
-    });
-
     // animated counters
     const nums = gsap.utils.toArray<HTMLElement>(".counter-num");
     nums.forEach((el) => {
@@ -71,7 +61,7 @@ export default function About() {
       >
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           <div className="about-reveal rounded-2xl border border-stroke bg-glass p-6 shadow-glow">
-            <h3 className="glitch text-xl font-semibold tracking-tight">
+            <h3 className="text-xl font-semibold tracking-tight">
               A modern frontend engineer with a product mindset.
             </h3>
             <p className="mt-3 text-white/70">

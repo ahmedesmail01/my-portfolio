@@ -35,18 +35,6 @@ export default function Experience() {
         scrollTrigger: { trigger: ref.current, start: "top 75%" },
       },
     );
-
-    gsap.to(".xp-line", {
-      scaleY: 1,
-      transformOrigin: "top",
-      ease: "none",
-      scrollTrigger: {
-        trigger: ref.current,
-        start: "top 70%",
-        end: "bottom 30%",
-        scrub: 1,
-      },
-    });
   });
 
   useEffect(() => {
