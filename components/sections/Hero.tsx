@@ -9,7 +9,6 @@ import MagneticButton from "@/components/ui/MagneticButton";
 import me from "@/public/images/me.jpeg";
 
 import BlurText from "@/components/ui/BlurText";
-import DarkVeil from "@/components/ui/DarkVeil";
 import LogoLoop from "@/components/ui/LogoLoop";
 import { useRef } from "react";
 import {
@@ -85,51 +84,13 @@ export default function Hero() {
       0.8, // Start a bit later to let text blur in
     );
 
-    // 3. Main image specialized reveal
+    // 3. Main image specialized reveal (kept, but no continuous mouse parallax)
     tl.fromTo(
       ".hero-photo-container",
       { scale: 0.9, opacity: 0, y: 30 },
       { scale: 1, opacity: 1, y: 0, duration: 1.4, ease: "expo.out" },
       0.5,
     );
-
-    // 4. Parallax Mouse Move - Keep this for the shapes
-    if (parallaxRef.current) {
-      const q = gsap.utils.selector(parallaxRef.current);
-
-      const onMove = (e: MouseEvent) => {
-        const { clientX, clientY } = e;
-        const xPos = clientX / window.innerWidth - 0.5;
-        const yPos = clientY / window.innerHeight - 0.5;
-
-        // Move background shapes slower
-        gsap.to(q(".layer-bg"), {
-          x: xPos * -30,
-          y: yPos * -30,
-          duration: 1,
-          ease: "power2.out",
-        });
-
-        // Move shapes faster (closer)
-        gsap.to(q(".layer-mid"), {
-          x: xPos * -60,
-          y: yPos * -60,
-          duration: 1,
-          ease: "power2.out",
-        });
-
-        // Move main photo slightly for depth
-        gsap.to(".hero-photo-container", {
-          rotationY: xPos * 8,
-          rotationX: yPos * -8,
-          duration: 1.5,
-          ease: "power3.out",
-        });
-      };
-
-      window.addEventListener("mousemove", onMove);
-      return () => window.removeEventListener("mousemove", onMove);
-    }
   });
 
   return (
@@ -137,25 +98,18 @@ export default function Hero() {
       ref={ref}
       className="relative min-h-[90vh] overflow-hidden px-6 py-28 md:py-32"
     >
-      {/* Background Pattern & Floating Objects */}
-      <div ref={parallaxRef} className="absolute inset-0 z-0 overflow-hidden">
-        {/* Dark Veil Background */}
-        <DarkVeil
-          hueShift={0}
-          noiseIntensity={0}
-          scanlineIntensity={0}
-          speed={0.5}
-          scanlineFrequency={0}
-          warpAmount={0}
-        />
+      {/* Background Pattern & Floating Objects (static, no WebGL/continuous animation) */}
+      <div
+        ref={parallaxRef}
+        className="absolute inset-0 z-0 overflow-hidden bg-[radial-gradient(circle_at_top,_rgba(114,31,35,0.75),transparent_55%),radial-gradient(circle_at_bottom,_rgba(12,12,12,1),#02010a)]"
+      >
+        {/* Soft floating shapes */}
+        <div className="hero-bg-el absolute left-[10%] top-[20%] h-32 w-32 rounded-full bg-ember/10 blur-3xl pointer-events-none" />
+        <div className="hero-bg-el absolute right-[15%] top-[10%] h-64 w-64 rounded-full bg-blue-500/5 blur-[100px] pointer-events-none" />
 
-        {/* Floating Shapes */}
-        <div className="hero-bg-el layer-bg absolute left-[10%] top-[20%] h-32 w-32 rounded-full bg-ember/10 blur-3xl pointer-events-none" />
-        <div className="hero-bg-el layer-bg absolute right-[15%] top-[10%] h-64 w-64 rounded-full bg-blue-500/5 blur-[100px] pointer-events-none" />
-
-        <div className="hero-bg-el layer-mid absolute left-[5%] bottom-[20%] h-4 w-4 rounded-full border border-white/10 pointer-events-none" />
-        <div className="hero-bg-el layer-mid absolute right-[20%] top-[15%] h-8 w-8 rotate-45 border border-ember/20 pointer-events-none" />
-        <div className="hero-bg-el layer-mid absolute left-[40%] top-[40%] h-2 w-2 rounded-full bg-white/20 pointer-events-none" />
+        <div className="hero-bg-el absolute left-[5%] bottom-[20%] h-4 w-4 rounded-full border border-white/10 pointer-events-none" />
+        <div className="hero-bg-el absolute right-[20%] top-[15%] h-8 w-8 rotate-45 border border-ember/20 pointer-events-none" />
+        <div className="hero-bg-el absolute left-[40%] top-[40%] h-2 w-2 rounded-full bg-white/20 pointer-events-none" />
       </div>
 
       <div className="relative z-10 mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 md:grid-cols-2">
