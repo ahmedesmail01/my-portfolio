@@ -1,12 +1,10 @@
 "use client";
 
-import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { profile } from "@/data/profile";
 import { useGsap } from "@/components/anim/useGsap";
 import MagneticButton from "@/components/ui/MagneticButton";
-import me from "@/public/images/me.jpeg";
 
 import BlurText from "@/components/ui/BlurText";
 import LogoLoop from "@/components/ui/LogoLoop";
@@ -167,13 +165,13 @@ export default function Hero() {
             <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-glass shadow-2xl">
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.1),transparent_50%)] z-20 pointer-events-none" />
 
-              <Image
-                src={me}
-                alt="Portrait"
-                width={900}
-                height={900}
-                priority
-                className="relative z-10 h-[500px] w-full object-cover transition-transform duration-700 hover:scale-105"
+              <video
+                src="/videos/Video_Generation_Complete.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="relative z-10 h-[500px] w-full object-cover object-top transition-transform duration-700 hover:scale-105"
               />
 
               {/* Overlay content on image */}
